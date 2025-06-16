@@ -11,7 +11,7 @@ A web application for exploring GitHub repository history with an intuitive time
 - ⌨️ Use arrow keys for precise commit navigation
 - 🔄 Load more commits for extensive history
 - 🎨 Syntax highlighting and diff visualization
-- 🔐 Secure authentication with GitHub Personal Access Tokens
+- 🔐 Secure authentication with GitHub OAuth Device Flow
 
 ## Getting Started
 
@@ -19,7 +19,6 @@ A web application for exploring GitHub repository history with an intuitive time
 
 - Node.js 18+ 
 - npm or yarn
-- GitHub Personal Access Token (for authenticated access)
 
 ### Installation
 
@@ -35,28 +34,35 @@ npm install
 npm run dev
 ```
 
-### Configuration
+### Deployment
 
-1. Create a GitHub Fine-grained Personal Access Token (Recommended):
-   - Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens
-   - Click "Generate new token"
-   - Set an expiration date
-   - Under "Repository access", choose:
-     - "Public Repositories" for public repos only, or
-     - "Selected repositories" to include specific private repos
-   - Under "Permissions" → "Repository permissions":
-     - Set "Contents" to "Read" (this is the only permission needed)
-   - Generate the token and copy it
-   
-2. Use the token in the app:
-   - Enter it on the login page when prompted
-   - Or continue without authentication (limited to 60 requests/hour for public repos)
+GitScrub is designed to be deployed on Netlify for the best user experience:
+
+- See [Netlify Deployment Guide](docs/NETLIFY_DEPLOYMENT.md) for detailed instructions
+- OAuth device flow authentication - no tokens to manage
+- Users authenticate directly with GitHub
+
+### Local Development
+
+For local development with OAuth support:
+
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Create .env file with your GitHub OAuth App Client ID
+cp .env.example .env
+# Edit .env and add your GITHUB_CLIENT_ID
+
+# Start development server with Netlify Functions
+netlify dev
+```
 
 ### Running Tests
 
 ```bash
-# Create .env.test with your GitHub token
-echo "GITHUB_TOKEN=your_token_here" > .env.test
+# Create .env.test with test configuration
+echo "GITHUB_CLIENT_ID=your_test_client_id" > .env.test
 
 # Run all tests
 npm test
@@ -85,7 +91,7 @@ npm run test:ui
 
 ## Architecture
 
-The app is a pure client-side application with no backend server required. It communicates directly with GitHub's API using Personal Access Tokens for authentication.
+The app uses Netlify Functions for OAuth authentication and communicates directly with GitHub's API. Authentication is handled via GitHub's OAuth Device Flow for a seamless user experience.
 
 Key components:
 - `FileTree`: Repository file browser

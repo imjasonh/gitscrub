@@ -1,5 +1,3 @@
-const CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
-
 export interface AuthState {
   token: string | null;
   user: GitHubUser | null;
@@ -66,45 +64,42 @@ export async function fetchUser(token: string): Promise<GitHubUser> {
 }
 
 export async function initiateDeviceFlow(): Promise<DeviceCodeResponse> {
-  // Using a CORS proxy for development
-  // In production, you'd need your own proxy or a different auth method
-  const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-  const response = await fetch(`${CORS_PROXY}https://github.com/login/device/code`, {
+  const response = await fetch('/api/device-code', {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      client_id: CLIENT_ID,
-      scope: 'repo read:user',
-    }),
   });
   
   if (!response.ok) {
-    throw new Error('Failed to initiate device flow');
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to initiate device flow');
   }
   
   return response.json();
 }
 
 export async function pollForToken(deviceCode: string): Promise<DeviceTokenResponse> {
-  const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-  const response = await fetch(`${CORS_PROXY}https://github.com/login/oauth/access_token`, {
+  const response = await fetch('/api/device-token', {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      client_id: CLIENT_ID,
       device_code: deviceCode,
-      grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
     }),
   });
   
+  // Handle different response statuses
+  if (response.status === 202) {
+    // Authorization pending or slow down
+    const data = await response.json();
+    return data;
+  }
+  
   if (!response.ok) {
-    throw new Error('Failed to poll for token');
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to poll for token');
   }
   
   return response.json();
