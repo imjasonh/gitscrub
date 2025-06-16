@@ -28,6 +28,14 @@ export default function FileViewerWithHistory({ owner, repo, path, initialRef }:
   const sliderRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
+    // Reset state when path changes
+    setVersions([]);
+    setCurrentIndex(0);
+    setError(null);
+    setHasMore(false);
+    contentCache.current.clear();
+    currentPage.current = 1;
+    
     loadFileHistory();
   }, [owner, repo, path]);
   
