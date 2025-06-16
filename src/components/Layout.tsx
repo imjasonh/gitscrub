@@ -1,11 +1,10 @@
-import { Outlet, Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { owner, repo } = useParams();
-  const location = useLocation();
   
   const handleLogout = () => {
     logout();

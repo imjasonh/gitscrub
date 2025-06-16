@@ -14,10 +14,10 @@ export default function Repository() {
   useEffect(() => {
     if (!owner || !repo) return;
     
-    async function loadRepository() {
+    async function loadRepository(ownerParam: string, repoParam: string) {
       try {
         setLoading(true);
-        const repoData = await github.getRepository(owner, repo);
+        const repoData = await github.getRepository(ownerParam, repoParam);
         setRepository(repoData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load repository');
@@ -26,8 +26,18 @@ export default function Repository() {
       }
     }
     
-    loadRepository();
+    loadRepository(owner, repo);
   }, [owner, repo]);
+  
+  // Early return if params are missing
+  if (!owner || !repo) {
+    return (
+      <div className="error">
+        <h2>Invalid repository URL</h2>
+        <button onClick={() => navigate('/')}>Go back</button>
+      </div>
+    );
+  }
   
   if (loading) {
     return <div className="loading">Loading repository...</div>;
