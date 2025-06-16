@@ -7,9 +7,12 @@ import Repository from './pages/Repository';
 import './App.css';
 
 function App() {
+  // Get base URL from Vite's base config
+  const basename = import.meta.env.BASE_URL;
+  
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Layout />}>

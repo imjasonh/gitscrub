@@ -4,7 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>GitScrub - GitHub Repository History Explorer</title>
+    <script>
+      // Handle redirect from 404.html for GitHub Pages
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const path = params.get('p');
+        if (path) {
+          // Clean up the URL and redirect
+          const newPath = window.location.pathname + path;
+          window.history.replaceState(null, null, newPath);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
