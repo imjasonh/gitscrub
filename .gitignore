@@ -37,3 +37,6 @@ playwright/.cache/
 # Coverage
 coverage/
 .nyc_output/
+
+# Local Netlify folder
+.netlify

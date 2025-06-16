@@ -15,9 +15,10 @@ This guide explains how to deploy GitScrub to Netlify with OAuth Device Flow aut
 3. Fill in the details:
    - **Application name**: GitScrub (or your preferred name)
    - **Homepage URL**: Your Netlify URL (e.g., `https://your-app.netlify.app`)
-   - **Authorization callback URL**: `https://github.com/login/device/success`
+   - **Authorization callback URL**: `https://your-app.netlify.app/.netlify/functions/auth-callback`
+     - For local development use: `http://localhost:8888/.netlify/functions/auth-callback`
 4. Click "Register application"
-5. Copy the **Client ID** (you'll need this later)
+5. Copy the **Client ID** and **Client Secret** (you'll need both)
 
 ## Step 2: Deploy to Netlify
 
@@ -35,10 +36,10 @@ This guide explains how to deploy GitScrub to Netlify with OAuth Device Flow aut
    npm install
    ```
 
-3. Create a `.env` file with your GitHub Client ID:
+3. Create a `.env` file with your GitHub OAuth credentials:
    ```bash
    cp .env.example .env
-   # Edit .env and add your GITHUB_CLIENT_ID
+   # Edit .env and add your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET
    ```
 
 4. Deploy to Netlify:
@@ -56,22 +57,24 @@ This guide explains how to deploy GitScrub to Netlify with OAuth Device Flow aut
 5. Configure build settings (should auto-detect):
    - **Build command**: `npm run build`
    - **Publish directory**: `dist`
-6. Add environment variable:
+6. Add environment variables:
    - Go to Site settings > Environment variables
    - Add `GITHUB_CLIENT_ID` with your GitHub OAuth App's Client ID
+   - Add `GITHUB_CLIENT_SECRET` with your GitHub OAuth App's Client Secret
 7. Deploy the site
 
 ## Step 3: Test the Deployment
 
 1. Visit your Netlify URL
 2. Click "Sign in with GitHub"
-3. You should see a device code
-4. Follow the prompts to authenticate on GitHub
-5. Once authenticated, you'll be redirected back to GitScrub
+3. You'll be redirected to GitHub to authorize the app
+4. After authorization, you'll be redirected back to GitScrub
+5. You should now be logged in and able to browse repositories
 
 ## Environment Variables
 
 - `GITHUB_CLIENT_ID`: Your GitHub OAuth App's Client ID (required)
+- `GITHUB_CLIENT_SECRET`: Your GitHub OAuth App's Client Secret (required)
 
 ## Local Development with Netlify Functions
 
@@ -98,8 +101,9 @@ The Netlify Functions handle the OAuth flow server-side, so there should be no C
 - The `/api/*` redirects are properly configured in `netlify.toml`
 
 ### Authentication Fails
-- Verify your GitHub OAuth App's Client ID is correctly set in Netlify's environment variables
-- Check that the Authorization callback URL is exactly `https://github.com/login/device/success`
+- Verify your GitHub OAuth App's Client ID and Secret are correctly set in Netlify's environment variables
+- Check that the Authorization callback URL matches your deployment URL: `https://your-app.netlify.app/.netlify/functions/auth-callback`
+- For local development, ensure the callback URL is `http://localhost:8888/.netlify/functions/auth-callback`
 - Look at the Function logs in Netlify's dashboard for error details
 
 ### Build Fails
@@ -109,6 +113,7 @@ The Netlify Functions handle the OAuth flow server-side, so there should be no C
 ## Security Notes
 
 - The GitHub Client ID is safe to expose (it's meant to be public)
-- Never commit the Client Secret (device flow doesn't use it)
+- Keep the Client Secret secure - never commit it to your repository
 - Tokens are stored in browser localStorage and never sent to any server
 - Netlify Functions act as a secure proxy for GitHub OAuth endpoints
+- The OAuth state parameter prevents CSRF attacks

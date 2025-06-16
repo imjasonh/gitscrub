@@ -11,7 +11,7 @@ A web application for exploring GitHub repository history with an intuitive time
 - ⌨️ Use arrow keys for precise commit navigation
 - 🔄 Load more commits for extensive history
 - 🎨 Syntax highlighting and diff visualization
-- 🔐 Secure authentication with GitHub OAuth Device Flow
+- 🔐 Secure authentication with GitHub OAuth
 
 ## Getting Started
 
@@ -39,7 +39,7 @@ npm run dev
 GitScrub is designed to be deployed on Netlify for the best user experience:
 
 - See [Netlify Deployment Guide](docs/NETLIFY_DEPLOYMENT.md) for detailed instructions
-- OAuth device flow authentication - no tokens to manage
+- OAuth web flow authentication - no tokens to manage
 - Users authenticate directly with GitHub
 
 ### Local Development
@@ -50,9 +50,9 @@ For local development with OAuth support:
 # Install Netlify CLI
 npm install -g netlify-cli
 
-# Create .env file with your GitHub OAuth App Client ID
+# Create .env file with your GitHub OAuth App credentials
 cp .env.example .env
-# Edit .env and add your GITHUB_CLIENT_ID
+# Edit .env and add your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET
 
 # Start development server with Netlify Functions
 netlify dev
@@ -91,7 +91,7 @@ npm run test:ui
 
 ## Architecture
 
-The app uses Netlify Functions for OAuth authentication and communicates directly with GitHub's API. Authentication is handled via GitHub's OAuth Device Flow for a seamless user experience.
+The app uses Netlify Functions for OAuth authentication and communicates directly with GitHub's API. Authentication is handled via GitHub's OAuth web flow for a seamless user experience.
 
 Key components:
 - `FileTree`: Repository file browser

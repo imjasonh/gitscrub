@@ -8,9 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:debug": "playwright test --debug",
+    "test": "node scripts/test-with-netlify.js",
+    "test:ui": "node scripts/test-with-netlify.js --ui",
+    "test:debug": "node scripts/test-with-netlify.js --debug",
     "test:report": "playwright show-report"
   },
   "dependencies": {

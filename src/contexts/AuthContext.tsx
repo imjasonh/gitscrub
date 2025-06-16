@@ -42,6 +42,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   
   const setToken = async (token: string) => {
     try {
+      // If we already have user data from OAuth callback, use it
+      const currentAuth = getStoredAuth();
+      if (currentAuth.token === token && currentAuth.user) {
+        setAuth(currentAuth);
+        return;
+      }
+      
+      // Otherwise fetch user data
       const user = await fetchUser(token);
       setAuth({ token, user });
     } catch (error) {

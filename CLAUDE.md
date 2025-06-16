@@ -1,17 +1,17 @@
 # GitScrub Project Context
 
 ## Overview
-GitScrub is a web application for exploring GitHub repository history with an intuitive timeline interface. It's a pure client-side React app that uses GitHub's REST API.
+GitScrub is a web application for exploring GitHub repository history with an intuitive timeline interface. It uses Netlify Functions for OAuth authentication and communicates directly with GitHub's REST API.
 
 ## Key Features
-- Browse any public GitHub repository (private repos with auth)
+- Browse any GitHub repository (public and private)
 - Navigate repository file structure with a tree view
 - View file history with an interactive timeline slider
 - Click anywhere on the timeline to jump to specific commits
 - Use arrow keys (←→) for precise commit navigation
 - Load more commits for extensive history (>100 commits)
 - Syntax highlighting and diff visualization
-- Secure authentication with GitHub Personal Access Tokens (Fine-grained recommended)
+- Secure authentication with GitHub OAuth
 
 ## Technical Stack
 - **Framework**: React 18 with TypeScript
@@ -19,8 +19,8 @@ GitScrub is a web application for exploring GitHub repository history with an in
 - **Routing**: React Router v6 with basename support for GitHub Pages
 - **API**: GitHub REST API v3
 - **Testing**: Playwright
-- **Deployment**: GitHub Pages via GitHub Actions
-- **Authentication**: Personal Access Tokens (stored in localStorage)
+- **Deployment**: Netlify with serverless functions
+- **Authentication**: OAuth web flow via Netlify Functions
 
 ## Important Implementation Details
 
@@ -31,16 +31,17 @@ GitScrub is a web application for exploring GitHub repository history with an in
 - Keyboard navigation with arrow keys when focused
 
 ### Authentication
-- Supports both classic (ghp_) and fine-grained (github_pat_, ghs_) tokens
-- Recommends fine-grained tokens with minimal permissions (Contents: Read only)
-- Token stored in localStorage
-- Can work without auth for public repos (60 requests/hour limit)
+- Uses GitHub OAuth web flow for seamless authentication
+- No manual token creation or management required
+- Access tokens stored securely in localStorage
+- Authentication is required for all usage
+- OAuth state parameter for CSRF protection
 
-### GitHub Pages Deployment
-- Uses base path `/gitscrub/` in production
-- 404.html trick for client-side routing
-- Automatic deployment on push to main branch
-- Build command: `npm run build -- --base=/gitscrub/`
+### Netlify Deployment
+- Serverless functions handle OAuth flow
+- Automatic deployment via Git integration
+- Environment variable for GitHub Client ID
+- Build command: `npm run build`
 
 ## Project Structure
 ```
@@ -75,13 +76,13 @@ src/
 
 ## Common Commands
 ```bash
-# Development
-npm run dev
+# Development (with Netlify Functions)
+netlify dev
 
 # Build for production
-npm run build -- --base=/gitscrub/
+npm run build
 
-# Run tests (needs .env.test with GITHUB_TOKEN)
+# Run tests (needs .env.test with GITHUB_CLIENT_ID)
 npm test
 
 # Type checking
@@ -98,9 +99,9 @@ The app includes console logging for debugging:
 - Try-catch around React rendering with fallback error display
 
 ## Future Considerations
-- The app is designed to work purely client-side with no backend
-- Rate limiting can be an issue without authentication (60/hour for unauthenticated)
-- CORS prevents OAuth/Device Flow, hence the PAT approach
+- The app uses Netlify Functions to handle OAuth authentication
+- Rate limiting is managed through authenticated requests
+- OAuth web flow provides secure authentication via serverless functions
 - File history is limited to 100 commits per API call (pagination implemented)
 
 ## License

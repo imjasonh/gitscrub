@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { github, type Repository as RepoType } from '../lib/github';
 import FileTree from '../components/FileTree';
 import FileViewerWithHistory from '../components/FileViewerWithHistory';
@@ -7,12 +8,20 @@ import FileViewerWithHistory from '../components/FileViewerWithHistory';
 export default function Repository() {
   const { owner, repo, '*': path } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [repository, setRepository] = useState<RepoType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    if (!owner || !repo) return;
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+  }, [user, navigate]);
+  
+  useEffect(() => {
+    if (!owner || !repo || !user) return;
     
     async function loadRepository(ownerParam: string, repoParam: string) {
       try {
@@ -27,7 +36,7 @@ export default function Repository() {
     }
     
     loadRepository(owner, repo);
-  }, [owner, repo]);
+  }, [owner, repo, user]);
   
   // Early return if params are missing
   if (!owner || !repo) {

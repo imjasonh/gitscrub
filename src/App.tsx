@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Repository from './pages/Repository';
+import AuthSuccess from './pages/AuthSuccess';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/auth-success" element={<AuthSuccess />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/:owner/:repo" element={<Repository />} />

@@ -12,7 +12,10 @@ test.describe('Repository Navigation', () => {
         token: 'fake_token',
         user: {
           login: 'testuser',
-          avatar_url: 'https://github.com/identicons/test.png'
+          id: 12345,
+          avatar_url: 'https://github.com/identicons/test.png',
+          name: 'Test User',
+          public_repos: 10
         }
       }));
     });
