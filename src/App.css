@@ -278,7 +278,14 @@
 .repo-form {
   display: flex;
   gap: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.note {
+  text-align: center;
+  color: #586069;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
 }
 
 .repo-input {

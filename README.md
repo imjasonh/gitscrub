@@ -4,7 +4,7 @@ A web application for exploring GitHub repository history with an intuitive time
 
 ## Features
 
-- 🔍 Browse any public GitHub repository
+- 🔍 Browse public GitHub repositories
 - 📁 Navigate repository file structure
 - 📜 View file history with timeline slider
 - 🎯 Click anywhere on the timeline to jump to specific commits

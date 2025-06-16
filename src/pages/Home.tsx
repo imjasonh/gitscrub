@@ -16,8 +16,19 @@ export default function Home() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    const input = repoUrl.trim();
+    
+    // Check if it's already in owner/repo format
+    if (input.includes('/') && !input.includes('github.com')) {
+      const [owner, repo] = input.split('/');
+      if (owner && repo) {
+        navigate(`/${owner}/${repo.replace('.git', '')}`);
+        return;
+      }
+    }
+    
     // Parse GitHub URL to extract owner and repo
-    const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+    const match = input.match(/github\.com\/([^\/]+)\/([^\/]+)/);
     if (match) {
       const [, owner, repo] = match;
       navigate(`/${owner}/${repo.replace('.git', '')}`);
@@ -32,7 +43,7 @@ export default function Home() {
     <div className="home-page">
       <div className="welcome-section">
         <h2>Welcome back, {user.name || user.login}!</h2>
-        <p>Enter a GitHub repository URL to explore its history</p>
+        <p>Enter a public GitHub repository to explore its history</p>
       </div>
       
       <form onSubmit={handleSubmit} className="repo-form">
@@ -40,7 +51,7 @@ export default function Home() {
           type="text"
           value={repoUrl}
           onChange={(e) => setRepoUrl(e.target.value)}
-          placeholder="https://github.com/owner/repository"
+          placeholder="owner/repository or https://github.com/owner/repository"
           className="repo-input"
           required
         />
@@ -48,6 +59,10 @@ export default function Home() {
           Explore Repository
         </button>
       </form>
+      
+      <p className="note">
+        <strong>Note:</strong> GitScrub currently supports only public repositories.
+      </p>
       
       <div className="examples">
         <h3>Try these examples:</h3>
