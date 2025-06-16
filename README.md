@@ -37,13 +37,20 @@ npm run dev
 
 ### Configuration
 
-1. Create a GitHub Personal Access Token:
-   - Go to GitHub Settings → Developer settings → Personal access tokens
-   - Generate a new token with `repo` scope for private repos or `public_repo` for public only
+1. Create a GitHub Fine-grained Personal Access Token (Recommended):
+   - Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens
+   - Click "Generate new token"
+   - Set an expiration date
+   - Under "Repository access", choose:
+     - "Public Repositories" for public repos only, or
+     - "Selected repositories" to include specific private repos
+   - Under "Permissions" → "Repository permissions":
+     - Set "Contents" to "Read" (this is the only permission needed)
+   - Generate the token and copy it
    
 2. Use the token in the app:
    - Enter it on the login page when prompted
-   - Or continue without authentication (limited to 60 requests/hour)
+   - Or continue without authentication (limited to 60 requests/hour for public repos)
 
 ### Running Tests
 

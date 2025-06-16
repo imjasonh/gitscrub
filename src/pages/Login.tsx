@@ -16,9 +16,12 @@ export default function Login() {
       setLoading(true);
       setError(null);
       
-      // Basic validation
-      if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
-        throw new Error('Invalid token format. GitHub tokens start with ghp_ or github_pat_');
+      // Basic validation for token format
+      const validTokenPrefixes = ['ghp_', 'github_pat_', 'ghs_'];
+      const hasValidPrefix = validTokenPrefixes.some(prefix => token.startsWith(prefix));
+      
+      if (!hasValidPrefix) {
+        throw new Error('Invalid token format. GitHub tokens start with ghp_, github_pat_, or ghs_');
       }
       
       await setToken(token);
@@ -64,15 +67,29 @@ export default function Login() {
         
         <div className="help-section">
           <details>
-            <summary>How to get a Personal Access Token</summary>
+            <summary>How to get a Personal Access Token (Recommended: Fine-grained)</summary>
             <ol>
-              <li>Go to <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener noreferrer">GitHub Settings → Personal Access Tokens</a></li>
-              <li>Click "Generate new token (classic)"</li>
-              <li>Give it a name (e.g., "GitScrub")</li>
-              <li>Select scopes: <code>repo</code> (for private repos) or <code>public_repo</code> (for public repos only)</li>
+              <li>Go to <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">GitHub Settings → Fine-grained tokens</a></li>
+              <li>Give it a name (e.g., "GitScrub") and set expiration</li>
+              <li>Under <strong>Repository access</strong>:
+                <ul>
+                  <li>Choose "Public Repositories" for public repos only</li>
+                  <li>Or "Selected repositories" to include specific private repos</li>
+                </ul>
+              </li>
+              <li>Under <strong>Permissions</strong> → <strong>Repository permissions</strong>:
+                <ul>
+                  <li>Set <code>Contents</code> to <code>Read</code></li>
+                  <li>This is the only permission needed!</li>
+                </ul>
+              </li>
               <li>Click "Generate token"</li>
               <li>Copy the token and paste it above</li>
             </ol>
+            <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#586069' }}>
+              <strong>Note:</strong> Fine-grained tokens are more secure as they limit access to only what's needed.
+              Classic tokens work too but require broader permissions.
+            </p>
           </details>
         </div>
         

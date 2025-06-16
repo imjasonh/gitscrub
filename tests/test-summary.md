@@ -45,6 +45,7 @@ All failing tests are due to attempting to access GitHub API without authenticat
 - Tests require a GitHub Personal Access Token in `.env.test`
 - Token is loaded via dotenv in playwright.config.ts
 - Authenticated tests bypass rate limiting issues
+- Recommended: Use a Fine-grained PAT with only "Contents: Read" permission
 
 ## Running Tests
 
