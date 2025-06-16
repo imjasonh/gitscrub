@@ -59,6 +59,24 @@
   text-decoration: underline;
 }
 
+.header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  color: white;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.github-link:hover {
+  opacity: 1;
+}
+
 .user-menu {
   display: flex;
   align-items: center;
