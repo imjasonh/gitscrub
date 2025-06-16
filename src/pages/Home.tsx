@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -6,6 +6,12 @@ export default function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [repoUrl, setRepoUrl] = useState('');
+  
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +25,6 @@ export default function Home() {
   };
   
   if (!user) {
-    navigate('/login');
     return null;
   }
   
