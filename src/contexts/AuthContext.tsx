@@ -11,6 +11,7 @@ interface AuthContextValue extends AuthState {
   login: () => void;
   logout: () => void;
   setToken: (token: string) => Promise<void>;
+  setAuthData: (auth: AuthState) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -59,8 +60,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
   
+  const setAuthData = (authData: AuthState) => {
+    setAuth(authData);
+    storeAuth(authData);
+  };
+  
   return (
-    <AuthContext.Provider value={{ ...auth, login, logout, setToken }}>
+    <AuthContext.Provider value={{ ...auth, login, logout, setToken, setAuthData }}>
       {children}
     </AuthContext.Provider>
   );

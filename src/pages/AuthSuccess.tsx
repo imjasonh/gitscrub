@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 export default function AuthSuccess() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { setToken } = useAuth();
+  const { setAuthData } = useAuth();
 
   useEffect(() => {
     const handleAuth = async () => {
@@ -20,10 +20,8 @@ export default function AuthSuccess() {
         const authData = JSON.parse(decodeURIComponent(authDataString));
         
         if (authData.token && authData.user) {
-          // Store the complete auth data first
-          localStorage.setItem('github_auth', JSON.stringify(authData));
-          // Then notify the auth context
-          await setToken(authData.token);
+          // Set the auth data directly in the context
+          setAuthData(authData);
           navigate('/');
         } else {
           navigate('/login?error=invalid_auth_data');
@@ -35,7 +33,7 @@ export default function AuthSuccess() {
     };
 
     handleAuth();
-  }, [searchParams, setToken, navigate]);
+  }, [searchParams, setAuthData, navigate]);
 
   return (
     <div className="auth-success-page">
